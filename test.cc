@@ -1,8 +1,10 @@
-#include <atomic>
-#include <utility>
-#include <iostream>
 #include <gtest/gtest.h>
+
+#include <atomic>
+#include <iostream>
 #include <thread>
+#include <utility>
+
 #include "circular_buffer.h"
 
 namespace {
@@ -53,9 +55,7 @@ TEST_F(CircularBufferIntTest, POP) {
 TEST_F(CircularBufferIntTest, FILL) {
   CircularBufferProducer<int> producer(buffer);
   CircularBufferConsumer<int> consumer(buffer);
-  for (int k=0; k<100; k++) {
-    producer.push(k);
-  }
+  for (int k = 0; k < 100; k++) { producer.push(k); }
   ASSERT_EQ(consumer.empty(), false);
   ASSERT_EQ(consumer.size(), 100);
   ASSERT_EQ(producer.filled(), true);
@@ -71,7 +71,7 @@ TEST_F(CircularBufferIntTest, FILL) {
 TEST_F(CircularBufferIntTest, CYCLE) {
   CircularBufferProducer<int> producer(buffer);
   CircularBufferConsumer<int> consumer(buffer);
-  for (int k=0; k<100000; k++) {
+  for (int k = 0; k < 100000; k++) {
     producer.push(k);
     ASSERT_EQ(consumer.empty(), false);
     ASSERT_EQ(consumer.size(), 1);
@@ -88,10 +88,8 @@ TEST_F(CircularBufferIntTest, CYCLE) {
 TEST_F(CircularBufferIntTest, CYCLE_2) {
   CircularBufferProducer<int> producer(buffer);
   CircularBufferConsumer<int> consumer(buffer);
-  for (int k=0; k<99; k++) {
-    producer.push(k);
-  }
-  for (int k=0; k<100000; k++) {
+  for (int k = 0; k < 99; k++) { producer.push(k); }
+  for (int k = 0; k < 100000; k++) {
     producer.push(k);
     ASSERT_EQ(consumer.empty(), false);
     ASSERT_EQ(consumer.size(), 100);
@@ -108,13 +106,12 @@ TEST_F(CircularBufferIntTest, CYCLE_2) {
 TEST_F(CircularBufferIntTest, MULTITHREAD) {
   std::thread t([&]() {
     CircularBufferProducer<int> producer(buffer);
-    for (int k=0; k<100; k++) {
-      producer.push(k);
-    }
+    for (int k = 0; k < 100; k++) { producer.push(k); }
   });
   CircularBufferConsumer<int> consumer(buffer);
-  for (int k=0; k<100; k++) {
-    while (consumer.empty());
+  for (int k = 0; k < 100; k++) {
+    while (consumer.empty())
+      ;
     ASSERT_EQ(consumer.pop(), k);
   }
   t.join();
@@ -123,14 +120,16 @@ TEST_F(CircularBufferIntTest, MULTITHREAD) {
 TEST_F(CircularBufferIntTest, MULTITHREAD_2) {
   std::thread t([&]() {
     CircularBufferProducer<int> producer(buffer);
-    for (int k=0; k<100000; k++) {
-      while (producer.filled());
+    for (int k = 0; k < 100000; k++) {
+      while (producer.filled())
+        ;
       producer.push(k);
     }
   });
   CircularBufferConsumer<int> consumer(buffer);
-  for (int k=0; k<100000; k++) {
-    while (consumer.empty());
+  for (int k = 0; k < 100000; k++) {
+    while (consumer.empty())
+      ;
     ASSERT_EQ(consumer.pop(), k);
   }
   t.join();
@@ -138,9 +137,9 @@ TEST_F(CircularBufferIntTest, MULTITHREAD_2) {
   ASSERT_EQ(consumer.size(), 0);
 }
 
-}
+} // namespace
 
-int main(int argc, char **argv) {
+int main(int argc, char** argv) {
   ::testing::InitGoogleTest(&argc, argv);
   return RUN_ALL_TESTS();
 }
