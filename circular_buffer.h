@@ -1,3 +1,9 @@
+/*!
+ *  Copyright (c) 2021 by KoyamaSohei
+ * \file circular_buffer.h
+ * \brief Lock-free Circular Buffer for single-consumer and single-producer.
+ */
+
 #ifndef CIRCULAR_BUFFER_H_
 #define CIRCULAR_BUFFER_H_
 
