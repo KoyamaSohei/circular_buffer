@@ -134,6 +134,8 @@ TEST_F(CircularBufferIntTest, MULTITHREAD_2) {
     ASSERT_EQ(consumer.pop(), k);
   }
   t.join();
+  ASSERT_EQ(consumer.empty(), true);
+  ASSERT_EQ(consumer.size(), 0);
 }
 
 }
