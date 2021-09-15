@@ -12,7 +12,7 @@ class CircularBuffer;
 /**
  * CircularBufferProducer can push() on CircularBuffer.
  * Note: this is NOT thread-safe.
- * before push, user have to check if queue is filled, by fill()
+ * before push, user have to check if queue is filled, by filled()
  */ 
 template <typename T>
 class CircularBufferProducer {
@@ -24,7 +24,7 @@ public:
   ~CircularBufferProducer() {
     buf->has_producer.store(false, std::memory_order_release);
   }
-  bool fill() {
+  bool filled() {
     return size()+1 == buf->size;
   }
   int64_t size() {

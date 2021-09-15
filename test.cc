@@ -27,7 +27,7 @@ TEST_F(CircularBufferIntTest, PUSH) {
   producer.push(10);
   ASSERT_EQ(consumer.empty(), false);
   ASSERT_EQ(consumer.size(), 1);
-  ASSERT_EQ(producer.fill(), false);
+  ASSERT_EQ(producer.filled(), false);
   ASSERT_EQ(producer.size(), 1);
 }
 
@@ -46,7 +46,7 @@ TEST_F(CircularBufferIntTest, POP) {
   ASSERT_EQ(consumer.pop(), 10);
   ASSERT_EQ(consumer.empty(), true);
   ASSERT_EQ(consumer.size(), 0);
-  ASSERT_EQ(producer.fill(), false);
+  ASSERT_EQ(producer.filled(), false);
   ASSERT_EQ(producer.size(), 0);
 }
 
@@ -58,13 +58,13 @@ TEST_F(CircularBufferIntTest, FILL) {
   }
   ASSERT_EQ(consumer.empty(), false);
   ASSERT_EQ(consumer.size(), 100);
-  ASSERT_EQ(producer.fill(), true);
+  ASSERT_EQ(producer.filled(), true);
   ASSERT_EQ(producer.size(), 100);
 
   ASSERT_EQ(consumer.pop(), 0);
   ASSERT_EQ(consumer.empty(), false);
   ASSERT_EQ(consumer.size(), 99);
-  ASSERT_EQ(producer.fill(), false);
+  ASSERT_EQ(producer.filled(), false);
   ASSERT_EQ(producer.size(), 99);
 }
 
@@ -75,12 +75,12 @@ TEST_F(CircularBufferIntTest, CYCLE) {
     producer.push(k);
     ASSERT_EQ(consumer.empty(), false);
     ASSERT_EQ(consumer.size(), 1);
-    ASSERT_EQ(producer.fill(), false);
+    ASSERT_EQ(producer.filled(), false);
     ASSERT_EQ(producer.size(), 1);
     consumer.pop();
     ASSERT_EQ(consumer.empty(), true);
     ASSERT_EQ(consumer.size(), 0);
-    ASSERT_EQ(producer.fill(), false);
+    ASSERT_EQ(producer.filled(), false);
     ASSERT_EQ(producer.size(), 0);
   }
 }
@@ -95,12 +95,12 @@ TEST_F(CircularBufferIntTest, CYCLE_2) {
     producer.push(k);
     ASSERT_EQ(consumer.empty(), false);
     ASSERT_EQ(consumer.size(), 100);
-    ASSERT_EQ(producer.fill(), true);
+    ASSERT_EQ(producer.filled(), true);
     ASSERT_EQ(producer.size(), 100);
     consumer.pop();
     ASSERT_EQ(consumer.empty(), false);
     ASSERT_EQ(consumer.size(), 99);
-    ASSERT_EQ(producer.fill(), false);
+    ASSERT_EQ(producer.filled(), false);
     ASSERT_EQ(producer.size(), 99);
   }
 }
@@ -124,7 +124,7 @@ TEST_F(CircularBufferIntTest, MULTITHREAD_2) {
   std::thread t([&]() {
     CircularBufferProducer<int> producer(buffer);
     for (int k=0; k<100000; k++) {
-      while (producer.fill());
+      while (producer.filled());
       producer.push(k);
     }
   });
