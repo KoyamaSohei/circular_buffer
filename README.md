@@ -14,3 +14,7 @@ $ make
 ```
 $ ./test
 ```
+
+## How to use
+
+Please copy `circular_buffer.h` into your C++ project.
